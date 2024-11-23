@@ -3,6 +3,8 @@
 {% block content %}  
 <h1>Профиль</h1>
 
+{% include "users/includes/profile_menu.html" %}
+
 <form method="post">
     {% csrf_token %}  
     <div class="form-error">{{ form.non_field_errors }}</div>  

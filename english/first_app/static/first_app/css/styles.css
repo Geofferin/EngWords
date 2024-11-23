@@ -2,3 +2,9 @@ html, body {
     background-color: #000;
     color: #fff;
 }
+
+.logo {
+	background: url('../images/logo.jpg') no-repeat 10px 5px;
+	width: 70px;
+	height: 60px;
+}

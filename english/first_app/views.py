@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from first_app.models import Dictionary
 
 menu = [
-    {'title': 'На главную', 'url': 'home'},
     {'title': 'Словарь', 'url': 'dictionary'},
     {'title': 'Добавить слова', 'url': 'add_words'},
     {'title': 'О сайте', 'url': 'about'},

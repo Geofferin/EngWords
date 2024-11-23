@@ -1,2 +1,5 @@
 # Project exclude paths
 /english_site/
+
+/node_modules/
+.idea

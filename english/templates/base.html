@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+</head>
+<body>
+
+{% block mainmenu %}
+		<div class="header">
+			<ul id="mainmenu" class="mainmenu">
+                {% for m in menu %}
+                    {% if not forloop.last %}<li>{% else %}<li class="last">{% endif %}
+                        <a href="{% url m.url %}">{{m.title}}</a></li>
+                {% endfor %}
+                {% if user.is_authenticated %}
+                    <li class="last"><a href="{% url 'users:profile' %}">{{user.username}}</a> | <a href="{% url 'users:logout' %}">Выйти</a></li>
+                {% else %}
+                    <li class="last"><a href="{% url 'users:login' %}">Войти</a> | <a href="{% url 'users:register' %}">Регистрация</a></li>
+                {% endif %}
+			</ul>
+			<div class="clear"></div>
+		</div>
+{% endblock mainmenu %}
+
+<!-- Блок контента -->
+	<div class="content-text">
+      {% block content %}
+      {% endblock %}
+	</div>
+<!-- Конец блока контента -->
+</body>
+</html>

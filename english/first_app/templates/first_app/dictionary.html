@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Словарь</h1>
+
+<form method="post" enctype='multipart/form-data'>
+    {% csrf_token %}
+    <ul>
+        {% for word in words %}
+            <li>
+                <span class="dictionary_word">
+                    <span class="word">{{ word.word }}</span>
+                    <span class="translation">{{ word.translation }}</span>
+                    {% if word.phrase %}
+                        <span class="phrase">{{ word.phrase }}</span>
+                    {% endif %}
+                    {% if word.image %}
+                        <img src="{{ word.image.url }}">
+                    {% endif %}
+                    {% if word.voice %}
+                        <audio src="{{word.vouce.url}}" type="audio/mpeg"></audio>
+                    {% endif %}
+                </span>
+            </li>
+        {% endfor %}
+    </ul>
+</form>
+
+{% endblock %}

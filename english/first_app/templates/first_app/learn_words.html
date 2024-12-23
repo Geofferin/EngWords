@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- <h1>Учить слова</h1>
+<h2>{{words}}</h2> -->
+
+<div id="word-container"></div>
+<button id="next-button">Далее</button>
+<script>
+    const wordContainer = document.getElementById('word-container');
+    const nextButton = document.getElementById('next-button');
+    let wordsData = JSON.parse('{{ words | safe }}'); // Парсим JSON строку
+    let currentWordIndex = 0;
+    let taskType = 0;
+
+    console.log("Words data received:", wordsData);
+
+     if (!wordContainer || !nextButton) {
+        console.error("Error: wordContainer or nextButton not found!");
+    } else {
+
+        function showWord() {
+             console.log("showWord called, index:", currentWordIndex);
+            if (wordsData.length > 0) {
+                const word = wordsData[currentWordIndex];
+                taskType = Math.floor(Math.random() * 2);
+
+                if (taskType == 0) {
+                  wordContainer.innerHTML = `
+                      <p>English: ${word.word}</p>
+                      <p>Russian: ${word.translation}</p>
+                  `;
+                } else {
+                  const choices = [word.translation, 'вариант2', 'вариант3', 'вариант4'].sort(() => 0.5 - Math.random());
+                  wordContainer.innerHTML = `
+                      <p>English: ${word.word}</p>
+                      <form id="choiceForm">
+                          ${choices.map(choice => `<label><input type="radio" name="choice" value="${choice}"> ${choice}</label><br>`).join('')}
+                      </form>
+                  `;
+                  document.getElementById('choiceForm').addEventListener('submit', function(event){
+                    event.preventDefault();
+                    const selectedChoice = document.querySelector('input[name="choice"]:checked').value;
+                    if (selectedChoice == word.translation) {
+                        alert('Правильно!')
+                    } else {
+                        alert('Неправильно!')
+                    }
+                    nextWord();
+                  })
+                }
+            } else {
+                wordContainer.innerHTML = "<p>Нет слов для изучения.</p>";
+            }
+         }
+
+
+        function nextWord() {
+             console.log("nextWord called, current index:", currentWordIndex);
+             currentWordIndex = (currentWordIndex + 1) % wordsData.length;
+             console.log("next index:", currentWordIndex);
+             showWord();
+        }
+
+         showWord();
+         nextButton.addEventListener('click', nextWord);
+        }
+</script>
+{% endblock %}

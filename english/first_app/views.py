@@ -1,13 +1,16 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.utils.lorem_ipsum import words
 
 from first_app.models import Dictionary
 
 menu = [
     {'title': 'Словарь', 'url': 'dictionary'},
-    {'title': 'Добавить слова', 'url': 'add_words'},
+    {'title': 'Учить слова', 'url': 'learn_words'},
     {'title': 'О сайте', 'url': 'about'},
     {'title': 'Обратная связь', 'url': 'feedback'},
 ]
@@ -30,12 +33,18 @@ def dictionary_view(request):
     }
     return render(request, 'first_app/dictionary.html', context=data)
 
-def add_words(request):
+@login_required(login_url='home')
+def learn_words(request):
+    # Получаем случайные 5 слов из базы данных
+    words = Dictionary.objects.order_by('?').values('word', 'translation')[:5]  # '?' для случайного порядка
+
     data = {
-        'title': "add_words",
+        'title': "learn_words",
         'menu': menu,
+        'words': json.dumps(list(words))
     }
-    return render(request, 'first_app/add_words.html', context=data)
+
+    return render(request, 'first_app/learn_words.html', context=data)
 
 def about(request):
     data = {
@@ -44,6 +53,7 @@ def about(request):
     }
     return render(request, 'first_app/about.html', context=data)
 
+@login_required(login_url='home')
 def feedback(request):
     data = {
         'title': "feedback",

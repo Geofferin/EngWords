@@ -5,4 +5,40 @@
 
 {% include "users/includes/profile_menu.html" %}
 
+<form method="post" enctype='multipart/form-data'>
+    {% csrf_token %}
+
+    <!-- Сообщение о удаленном слове -->
+    {% if messages %}
+        {% for message in messages %}
+            <h3>{{ message }}</h3>
+        {% endfor %}
+    {% endif %}
+
+    <ul>
+        {% for word in my_words %}
+            <li>
+                <span class="dictionary_word">
+                    <span class="word">{{ word.word }}</span>
+                    <span class="translation"> - {{ word.translation }}</span>
+                    {% if word.phrase %}
+                        <span class="phrase"> - {{ word.phrase }}</span>
+                    {% endif %}
+                    {% if word.image %}
+                        <img src="{{ word.image.url }}">
+                    {% endif %}
+                    {% if word.voice %}
+                        <audio src="{{word.vouce.url}}" type="audio/mpeg"></audio>
+                    {% endif %}
+                </span>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="word_id" value="{{ word.id }}">
+                    <button type="submit">Удалить</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</form>
+
  {% endblock %}

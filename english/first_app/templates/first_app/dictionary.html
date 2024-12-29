@@ -10,9 +10,9 @@
             <li>
                 <span class="dictionary_word">
                     <span class="word">{{ word.word }}</span>
-                    <span class="translation">{{ word.translation }}</span>
+                    <span class="translation"> - {{ word.translation }}</span>
                     {% if word.phrase %}
-                        <span class="phrase">{{ word.phrase }}</span>
+                        <span class="phrase"> - {{ word.phrase }}</span>
                     {% endif %}
                     {% if word.image %}
                         <img src="{{ word.image.url }}">

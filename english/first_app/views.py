@@ -2,8 +2,8 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
-
-from first_app.models import Dictionary
+import datetime
+from first_app.models import Dictionary, WordsToLearn
 
 menu = [
     {'title': 'Словарь', 'url': 'dictionary'},
@@ -35,14 +35,21 @@ def dictionary_view(request):
 
 @login_required(login_url='home')
 def learn_words(request):
-    # Получаем случайные 5 слов из базы данных
-    words = Dictionary.objects.order_by('?').values('word', 'translation')[:5]  # '?' для случайного порядка
+    # Берем первые 5 отсортированных по дате записей из WordsToLearn по id авторизованного пользователя
+    words_to_learn = WordsToLearn.objects.filter(user=request.user.id).order_by('date')[:5]
+    # По этим 5 записям, находим соответствующие слова из Dictionary
+    # Сейчас берутся только два значения - слово и перевод. При добавлении произношения, нужно добавить его передачу и сюда
+    words = Dictionary.objects.filter(id__in=list(words_to_learn.values_list('word', flat=True))).values('word', 'translation')
+
 
     data = {
         'title': "learn_words",
         'menu': menu,
         'words': json.dumps(list(words))
     }
+
+    # У выбранных 5 слов обновляется дата. Таким образом они перемещаются в конец очереди на обучение
+    WordsToLearn.objects.filter(id__in=list(words_to_learn.values_list('id', flat=True))).update(date=datetime.datetime.now())
 
     return render(request, 'first_app/learn_words.html', context=data)
 

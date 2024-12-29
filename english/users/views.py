@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
@@ -45,14 +46,23 @@ class UserPasswordChange(PasswordChangeView):
     template_name = "users/password_change_form.html"
     extra_context = {'title': "Изменение пароля"}
 
+
 def my_words(request):
-    words = WordsToLearn.objects.filter(user=request.user.id)
-    # В отдельную переменную можно записать даты, соответствующие нужному слову. Соответствие брать по id из таблицы Dictionary
-    my_words = Dictionary.objects.filter(id__in=list(words.values_list('word', flat=True)))
+    # Берем все записи из WordsToLearn по данному пользователю и сразу же берем все связанные слова из dictionary
+    words_to_learn = WordsToLearn.objects.filter(user=request.user.id).prefetch_related('word').order_by('date')
+    my_words = [
+        {
+            'word': i.word,
+            'date': i.date,
+            # id записи в таблице WordsToLearn
+            'words_to_learn_id': i.id,
+        }
+        for i in words_to_learn
+    ]
 
     if request.method == 'POST':
-        word = Dictionary.objects.get(id=request.POST.get('word_id'))
-        WordsToLearn.objects.get(user=request.user, word=word).delete()
+        word = request.POST.get('words_to_learn_id')
+        WordsToLearn.objects.filter(id=word, user=request.user).delete()
         messages.success(request, 'Слово удалено из вашего списка')
 
     data = {
@@ -62,13 +72,14 @@ def my_words(request):
 
     return render(request, 'users/words.html', context=data)
 
+
 def add_words(request):
     words_to_add = Dictionary.objects.all()
 
     if request.method == 'POST':
         try:
             word = Dictionary.objects.get(id=request.POST.get('word_id'))
-            WordsToLearn.objects.create(user=request.user, word=word)
+            WordsToLearn.objects.create(user=request.user, word=word, date=datetime.datetime.now())
             messages.success(request, 'Слово добавлено в ваш список')
         except IntegrityError:
             messages.info(request, 'Это слово уже есть в вашем списке')

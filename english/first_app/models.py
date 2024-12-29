@@ -14,7 +14,7 @@ class Dictionary(models.Model):
 class WordsToLearn(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     word = models.ForeignKey(Dictionary, on_delete=models.PROTECT)
-    date = models.DateField(null=True)
+    date = models.DateTimeField(null=True)
 
     class Meta:
         unique_together = ('user', 'word')

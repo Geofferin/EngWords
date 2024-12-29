@@ -37,63 +37,9 @@
                     <button type="submit">Добавить</button>
                 </form>
             </li>
+            <br>
         {% endfor %}
     </ul>
 </form>
-
-<!-- Неизведанная js-магия с просторов интернета -->
-<script>
-   document.addEventListener('DOMContentLoaded', function() {
-    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
-    const wordsList = document.getElementById('words-list'); // Получаем элемент списка
-
-    function handleFormSubmit(event) {
-        event.preventDefault(); // отменяем отправку формы
-
-        const form = event.target;
-        const wordId = form.dataset.wordId;
-        let formData = new FormData(form);
-
-
-        fetch(window.location.href, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken
-            },
-             body: formData,
-        })
-         .then(response => response.text())
-          .then(data =>{
-            wordsList.innerHTML = '';
-             const parser = new DOMParser();
-            const doc = parser.parseFromString(data, 'text/html');
-
-            const newWordsList = doc.getElementById('words-list').innerHTML;
-            wordsList.innerHTML = newWordsList;
-               const newMessages = doc.querySelector('.messages');
-                if (newMessages) {
-                 const oldMessages = document.querySelector('.messages');
-                  if(oldMessages) {
-                    oldMessages.remove();
-                   }
-                   form.parentNode.parentNode.parentNode.insertAdjacentElement("beforebegin", newMessages);
-                }
-             setEventListeners();
-          })
-
-    }
-
-
-     function setEventListeners(){
-        const removeForms = document.querySelectorAll('.remove-form');
-        removeForms.forEach(form => form.addEventListener('submit', handleFormSubmit));
-
-          const addForms = document.querySelectorAll('.add-form');
-        addForms.forEach(form => form.addEventListener('submit', handleFormSubmit));
-
-     }
-     setEventListeners();
-   });
-</script>
 
  {% endblock %}

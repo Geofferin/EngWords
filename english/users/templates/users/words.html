@@ -19,24 +19,28 @@
         {% for word in my_words %}
             <li>
                 <span class="dictionary_word">
-                    <span class="word">{{ word.word }}</span>
-                    <span class="translation"> - {{ word.translation }}</span>
-                    {% if word.phrase %}
-                        <span class="phrase"> - {{ word.phrase }}</span>
+                    <span class="word">{{ word.word.word }}</span>
+                    <span class="translation"> - {{ word.word.translation }}</span>
+                    {% if word.word.phrase %}
+                        <span class="phrase"> - {{ word.word.phrase }}</span>
                     {% endif %}
-                    {% if word.image %}
-                        <img src="{{ word.image.url }}">
+                    {% if word.word.image %}
+                        <img src="{{ word.word.image.url }}">
                     {% endif %}
-                    {% if word.voice %}
-                        <audio src="{{word.vouce.url}}" type="audio/mpeg"></audio>
+                    {% if word.word.voice %}
+                        <audio src="{{ word.word.voice.url }}" type="audio/mpeg"></audio>
                     {% endif %}
+                    <!-- {% if word.date %}
+                        <span class="date">Последний раз повторяли: {{word.date}}</span>
+                    {% endif %} -->
                 </span>
                 <form method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="word_id" value="{{ word.id }}">
+                    <input type="hidden" name="words_to_learn_id" value="{{ word.words_to_learn_id }}">
                     <button type="submit">Удалить</button>
                 </form>
             </li>
+            <br>
         {% endfor %}
     </ul>
 </form>

@@ -63,6 +63,11 @@ def my_words(request):
     if request.method == 'POST':
         word = request.POST.get('words_to_learn_id')
         WordsToLearn.objects.filter(id=word, user=request.user).delete()
+        # Удаляем сохранненые в сессии данные, чтобы при переходе к изучению, пользователь получал актуальный список
+        try:
+            del request.session['words'], request.session['wrong_words']
+        except KeyError:
+            pass
         messages.success(request, 'Слово удалено из вашего списка')
 
     data = {
@@ -80,6 +85,11 @@ def add_words(request):
         try:
             word = Dictionary.objects.get(id=request.POST.get('word_id'))
             WordsToLearn.objects.create(user=request.user, word=word, date=datetime.datetime.now())
+            # Удаляем сохранненые в сессии данные, чтобы при переходе к изучению, пользователь получал актуальный список
+            try:
+                del request.session['words'], request.session['wrong_words']
+            except KeyError:
+                pass
             messages.success(request, 'Слово добавлено в ваш список')
         except IntegrityError:
             messages.info(request, 'Это слово уже есть в вашем списке')

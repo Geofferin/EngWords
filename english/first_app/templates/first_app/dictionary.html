@@ -1,29 +1,36 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<h1 class="text-center my-4">Словарь</h1>
 
-{% block content %}
-<h1>Словарь</h1>
-
-<form method="post" enctype='multipart/form-data'>
-    {% csrf_token %}
-    <ul>
-        {% for word in words %}
-            <li>
-                <span class="dictionary_word">
-                    <span class="word">{{ word.word }}</span>
-                    <span class="translation"> - {{ word.translation }}</span>
-                    {% if word.phrase %}
-                        <span class="phrase"> - {{ word.phrase }}</span>
-                    {% endif %}
-                    {% if word.image %}
-                        <img src="{{ word.image.url }}">
-                    {% endif %}
-                    {% if word.voice %}
-                        <audio src="{{word.vouce.url}}" type="audio/mpeg"></audio>
-                    {% endif %}
-                </span>
-            </li>
-        {% endfor %}
-    </ul>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <ul class="list-group">
+    {% for word in words %}
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center"
+    >
+      <div class="dictionary_word">
+        <span class="word font-weight-bold">{{ word.word }}</span>
+        <span class="translation"> - {{ word.translation }}</span>
+        {% if word.phrase %}
+        <span class="phrase text-muted"> - {{ word.phrase }}</span>
+        {% endif %} {% if word.image %}
+        <img
+          src="{{ word.image.url }}"
+          class="img-thumbnail ml-2"
+          style="max-height: 100px"
+        />
+        {% endif %} {% if word.voice %}
+        <audio
+          src="{{ word.voice.url }}"
+          type="audio/mpeg"
+          controls
+          class="ml-2"
+        ></audio>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
 </form>
 
 {% endblock %}

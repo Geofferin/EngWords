@@ -1,22 +1,40 @@
-{% extends 'base.html' %}  
-   
-{% block content %}  
-<h1>Профиль</h1>
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h1 class="mb-4">Профиль</h1>
 
-{% include "users/includes/profile_menu.html" %}
+  {% include "users/includes/profile_menu.html" %}
 
-<form method="post">
-    {% csrf_token %}  
-    <div class="form-error">{{ form.non_field_errors }}</div>  
-    {% for f in form %}  
-    <p ><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>  
-    <div class="form-error">{{ f.errors }}</div>  
-    {% endfor %}  
-   
-    <p ><button type="submit">Сохранить</button></p>  
-</form>
+  <form method="post">
+    {% csrf_token %}
 
-<hr>
-<p><a href="{% url 'users:password_change' %}">Сменить пароль</a></p>
+    <!-- Сообщение об ошибках формы -->
+    <div class="form-error text-danger mb-3">{{ form.non_field_errors }}</div>
 
- {% endblock %}
+    <!-- Поля формы -->
+    {% for f in form %}
+    <div class="mb-3">
+      <label class="form-label" for="{{ f.id_for_label }}"
+        >{{ f.label }}:</label
+      >
+      <input
+        type="{{ f.type }}"
+        class="form-control"
+        name="{{ f.name }}"
+        id="{{ f.id_for_label }}"
+        value="{{ f.value|default:'' }}"
+      />
+      <div class="form-error text-danger mt-1">{{ f.errors }}</div>
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary w-100 py-2">Сохранить</button>
+  </form>
+
+  <hr />
+  <p>
+    <a href="{% url 'users:password_change' %}" class="btn btn-link"
+      >Сменить пароль</a
+    >
+  </p>
+</div>
+{% endblock %}

@@ -1,60 +1,81 @@
-{% extends 'base.html' %}
-
-{% block content %}
-
-<form method="post" enctype='multipart/form-data'>
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     <!-- Сообщение о правильном/неправильном ответе -->
-    {% if messages %}
-        {% for message in messages %}
-            <h3>{{ message }}</h3>
-        {% endfor %}
-    {% endif %}
-
-    {% if word == False %}
-        <h3>Нет слов для изучения</h3>
-        <br>
-        <a href="{% url 'users:add_words' %}">Добавить слова</a>
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-info">{{ message }}</div>
+    {% endfor %} {% endif %} {% if word == False %}
+    <h3>Нет слов для изучения</h3>
+    <br />
+    <a href="{% url 'users:add_words' %}" class="btn btn-primary"
+      >Добавить слова</a
+    >
     {% endif %}
 
     <!-- Первое задание -->
     {% if word.stage == 0 %}
-        <p>{{ word.word }}</p>
-        <p>{{ word.translation }}</p>
-        <form method="post">
-            <input type="hidden" name="answer" value="nezadanie,apervonachalniyprosmotrslovaiperevoda">
-            <input type="hidden" name="word_id" value="{{ id }}">
-            <button id="next-button">Далее</button>
-        </form>
+    <div class="mb-3">
+      <p><strong>{{ word.word }}</strong></p>
+      <p>{{ word.translation }}</p>
+      <form method="post">
+        <input
+          type="hidden"
+          name="answer"
+          value="nezadanie,apervonachalniyprosmotrslovaiperevoda"
+        />
+        <input type="hidden" name="word_id" value="{{ id }}" />
+        <button type="submit" class="btn btn-primary" id="next-button">
+          Далее
+        </button>
+      </form>
+    </div>
     {% endif %}
 
     <!-- Второе задание -->
     {% if word.stage == 1 %}
-        <h4>Выбери правильный перевод слова</h4>
-        <p>{{ word.translation }}</p>
-        <form method="post">
-            {% csrf_token %}
-            {% for choice in choices %}
-                <label><input type="radio" name="answer" value="{{ choice }}"> {{ choice }}</label><br>
-            {% endfor %}
-            <br>
-            <input type="hidden" name="word_id" value="{{ id }}">
-            <button type="submit">Проверить</button>
-        </form>
+    <h4>Выбери правильный перевод слова</h4>
+    <p>{{ word.translation }}</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        {% for choice in choices %}
+        <div class="form-check">
+          <input
+            type="radio"
+            class="form-check-input"
+            name="answer"
+            value="{{ choice }}"
+            id="choice_{{ forloop.counter }}"
+          />
+          <label class="form-check-label" for="choice_{{ forloop.counter }}"
+            >{{ choice }}</label
+          >
+        </div>
+        {% endfor %}
+      </div>
+      <input type="hidden" name="word_id" value="{{ id }}" />
+      <button type="submit" class="btn btn-primary">Проверить</button>
+    </form>
     {% endif %}
 
     <!-- Третье задание -->
     {% if word.stage == 2 %}
-        <p>{{ word.translation }}</p>
-        <form method="post">
-            <input type="text" name="answer" placeholder="Введите слово">
-            <br>
-            <br>
-            <input type="hidden" name="word_id" value="{{ id }}">
-            <button>Проверить</button>
-        </form>
+    <div class="mb-3">
+      <p>{{ word.translation }}</p>
+      <form method="post">
+        <input
+          type="text"
+          class="form-control"
+          name="answer"
+          placeholder="Введите слово"
+        />
+        <input type="hidden" name="word_id" value="{{ id }}" />
+        <button type="submit" class="btn btn-primary mt-3">Проверить</button>
+      </form>
+    </div>
     {% endif %}
-</form>
-
+  </form>
+</div>
 {% endblock %}

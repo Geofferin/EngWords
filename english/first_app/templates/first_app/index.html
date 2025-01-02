@@ -1,5 +1,93 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
-<h1>{{ important }}</h1>
+<div class="container text-center">
+  <h1 class="my-5">Главная</h1>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div id="quoteCarousel" class="card text-white bg-primary">
+        <div class="card-body">
+          <p id="quoteText" class="card-text"></p>
+          <footer class="blockquote-footer text-end text-white-50">
+            <span id="quoteAuthor"></span>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const quotes = [
+    {
+      quote: "You miss 100% of the shots you don’t take.",
+      translate:
+        "Вы промахнётесь 100 раз из 100 бросков, которые так и не сделаете.",
+      author: "Уэйн Гретцки",
+    },
+    {
+      quote:
+        "Success is one percent inspiration, ninety-nine percent perspiration.",
+      translate:
+        "Успех — это один процент вдохновения и девяносто девять процентов пота.",
+      author: "Томас Эдисон",
+    },
+    {
+      quote: "Our life is what our thoughts make it.",
+      translate: "Наша жизнь есть то, что мы думаем о ней.",
+      author: "Марк Аврелий",
+    },
+    {
+      quote: "The biggest risk is not taking any risk.",
+      translate: "Самый большой риск — не брать на себя никакого риска.",
+      author: "Марк Цукерберг",
+    },
+    {
+      quote:
+        "If you love something, set it free; if it comes back, it's yours. If it doesn't, it never was.",
+      translate:
+        "Если ты что-то любишь, отпусти. Если это твоё, то оно вернётся. Если нет, то никогда твоим не было.",
+      author: "Ричард Бах",
+    },
+    {
+      quote: "Chop your own wood and it will warm you twice.",
+      translate: "Коли свои дрова сам, и ты согреешься дважды.",
+      author: "Генри Форд",
+    },
+    {
+      quote: "You only live once, but if you do it right, once is enough.",
+      translate:
+        "Вы живёте только один раз, но если вы всё делаете правильно, достаточно одного раза.",
+      author: "Мэй Уэст",
+    },
+    {
+      quote: "Think like a man of action and act like a man of thought.",
+      translate: "Думай как человек действия и действуй как человек мысли.",
+      author: "Анри Бергсон",
+    },
+    {
+      quote: "Life is a series of choices.",
+      translate: "Жизнь — это череда выборов.",
+      author: "Нострадамус",
+    },
+    {
+      quote:
+        "The purpose of life is to live correctly, think correctly, and act correctly.",
+      translate:
+        "Цель жизни заключается в том, чтобы правильно жить, правильно мыслить и правильно действовать.",
+      author: "Махатма Ганди",
+    },
+  ];
+
+  function updateQuote() {
+    const index = Math.floor(Math.random() * quotes.length);
+    const { quote, translate, author } = quotes[index];
+    document.getElementById("quoteText").innerHTML =
+      `${quote}<br /><small>${translate}</small>`;
+    document.getElementById("quoteAuthor").innerText = author;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateQuote();
+    setInterval(updateQuote, 5000);
+  });
+</script>
 {% endblock %}

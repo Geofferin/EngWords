@@ -38,6 +38,7 @@
             {% for choice in choices %}
                 <label><input type="radio" name="answer" value="{{ choice }}"> {{ choice }}</label><br>
             {% endfor %}
+            <br>
             <input type="hidden" name="word_id" value="{{ id }}">
             <button type="submit">Проверить</button>
         </form>
@@ -47,9 +48,10 @@
     {% if word.stage == 2 %}
         <p>{{ word.translation }}</p>
         <form method="post">
-            <input type="text" name="answer" placeholder="Введите слово" >
-            <input type="hidden" name="word_id" value="{{ id }}">
+            <input type="text" name="answer" placeholder="Введите слово">
             <br>
+            <br>
+            <input type="hidden" name="word_id" value="{{ id }}">
             <button>Проверить</button>
         </form>
     {% endif %}

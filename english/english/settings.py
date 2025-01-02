@@ -132,6 +132,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Константа для определения на уровне всего проекта, куда редиректить не авторизированного пользователя
+LOGIN_URL = 'users:login'
+
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 

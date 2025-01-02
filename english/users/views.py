@@ -8,7 +8,7 @@ from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.views import PasswordChangeView
 from django.db import IntegrityError
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
 from first_app.models import *
 from users.forms import LoginUserForm, RegisterUserForm, ProfileUserForm, UserPasswordChangeForm
 
@@ -47,6 +47,7 @@ class UserPasswordChange(PasswordChangeView):
     extra_context = {'title': "Изменение пароля"}
 
 
+@login_required()
 def my_words(request):
     # Берем все записи из WordsToLearn по данному пользователю и сразу же берем все связанные слова из dictionary
     words_to_learn = WordsToLearn.objects.filter(user=request.user.id).prefetch_related('word').order_by('date')
@@ -78,6 +79,7 @@ def my_words(request):
     return render(request, 'users/words.html', context=data)
 
 
+@login_required()
 def add_words(request):
     words_to_add = Dictionary.objects.all()
 

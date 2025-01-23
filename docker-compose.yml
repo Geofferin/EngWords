@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  eng:
+    build: ./english
+    ports:
+      - "8080:8000"
+    volumes:
+      - .:/app

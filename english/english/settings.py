@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-8ra=yibb7angject14z+@wlhzc*5nc_ji6%yn(k&(_*39&*6qn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'first_app.apps.FirstAppConfig',
     'users.apps.UsersConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -81,19 +82,19 @@ WSGI_APPLICATION = 'english.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        'NAME': 'engwords_db',
-        'USER': 'eng_words',
-        'PASSWORD': '123',
-        'HOST': 'localhost',
-        'PORT': 5432,
-    }
-
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     'NAME': 'engwords_db',
+    #     'USER': 'eng_words',
+    #     'PASSWORD': '123',
+    #     'HOST': 'localhost',
+    #     'PORT': 5432,
     # }
+
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # MEDIA_ROOT = os.path(BASE_DIR, 'media')
@@ -153,3 +154,13 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
+}

@@ -20,4 +20,5 @@ class WordsToLearn(models.Model):
         unique_together = ('user', 'word')
 
     def __str__(self):
-        return self.word, self.date
+        return f'{self.word} - {self.date}'
+        #return self.word, self.date
